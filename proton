@@ -2095,7 +2095,6 @@ class Session:
             self.env.setdefault("WINE_MOVE_HACK", "1")
             # It is not possible for winewayland to support xalia since
             # there is no way to position toplevel surfaces dynamically in wayland
-            self.env.setdefault("WINE_WAYLAND_HACKS", "1")
             self.env["PROTON_USE_XALIA"] = "0"
             # Use surfaceless by default on winewayland
             self.env.setdefault("GST_GL_WINDOW", "surfaceless")
