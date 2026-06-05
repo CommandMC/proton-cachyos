@@ -1,0 +1,25 @@
+From f86f58784f8c0e85367d5fbb5999b72147c05212 Mon Sep 17 00:00:00 2001
+From: Stelios Tsampas <loathingkernel@gmail.com>
+Date: Fri, 5 Jun 2026 14:32:27 +0300
+Subject: [PATCH 2/2] fixup! ws2_32: Add support for AF_UNIX sockets.
+
+---
+ dlls/ws2_32/socket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/dlls/ws2_32/socket.c b/dlls/ws2_32/socket.c
+index 89cc9f7f5c8..df67aff6ba5 100644
+--- a/dlls/ws2_32/socket.c
++++ b/dlls/ws2_32/socket.c
+@@ -1339,7 +1339,7 @@ int WINAPI connect( SOCKET s, const struct sockaddr *addr, int len )
+ 
+     if (!(sync_event = get_sync_event())) return -1;
+ 
+-    if (addr->sa_family == AF_UNIX && *addr->sa_data)
++    if (addr && addr->sa_family == AF_UNIX && *addr->sa_data)
+     {
+         WCHAR *sun_pathW = strdupAtoW(addr->sa_data);
+         unix_path = wine_get_unix_file_name(sun_pathW);
+-- 
+2.54.0
+
