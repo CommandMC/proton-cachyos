@@ -1167,7 +1167,16 @@ class CompatData:
                     try_copy(g_proton.default_pfx_dir + "drive_c/windows/syswow64/" + f + ".dll", "drive_c/windows/syswow64",
                             prefix=self.prefix_dir, track_file=tracked_files, link_debug=True)
 
-                use_dxvk_sarek = "dxvksarek" in g_session.compat_config and os.path.isdir(g_proton.lib_dir + "wine/dxvk-sarek")
+                may_use_dxvk_sarek = os.path.isdir(g_proton.lib_dir + "wine/dxvk-sarek")
+                use_dxvk_sarek = (
+                        may_use_dxvk_sarek and
+                        "nodxvksarek" not in g_session.compat_config and
+                        (
+                                "dxvksarek" in g_session.compat_config or
+                                not utilities.primary_gpu_supports_vulkan(1, 3)
+                        )
+                )
+
                 use_dxvk_llasync = "dxvkllasync" in g_session.compat_config and os.path.isdir(g_proton.lib_dir + "wine/dxvk-llasync")
                 if use_dxvk_sarek:
                     use_nvapi = False
@@ -1850,6 +1859,7 @@ class Session:
         self.check_environment("PROTON_NO_D3D11", "nod3d11")
         self.check_environment("PROTON_NO_D3D10", "nod3d10")
         self.check_environment("PROTON_DXVK_SAREK", "dxvksarek")
+        self.check_environment("PROTON_NO_DXVK_SAREK", "nodxvksarek")
         self.check_environment("PROTON_DXVK_LLASYNC", "dxvkllasync")
         self.check_environment("PROTON_DXVK_LOWLATENCY", "dxvklowlatency")
         self.check_environment("PROTON_NO_ESYNC", "noesync")
